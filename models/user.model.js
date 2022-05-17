@@ -52,4 +52,14 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+userSchema.methods.findWithCredentials = async function (body) {
+  let user = await this.findOne({
+    $or: [{ username: body.username }, { email: body.email }],
+  });
+  if (!user || !(await bcrypt.compare(body.password, user.password))) {
+    throw new Error("Invalid credentials");
+  }
+  return user;
+};
+
 export default models.User || model("User", userSchema);
