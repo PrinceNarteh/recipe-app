@@ -1,45 +1,46 @@
-import Joi from "joi";
+import zod, { z } from "zod";
 
-export const registrationSchema = Joi.object({
-  firstName: Joi.string().min(2).required().messages({
-    "string.min": "First name length must be at least 2 characters long",
-    "any.required": "First Name is required",
-  }),
-  lastName: Joi.string().min(2).required().messages({
-    "string.min": "Last name length must be at least 2 characters long",
-    "any.required": "Last Name is required",
-  }),
-  username: Joi.string().min(2).required().messages({
-    "string.min": "Username length must be at least 2 characters long",
-    "any.required": "Username is required",
-  }),
-  email: Joi.string().email().required().messages({
-    "string.email": "Invalid email",
-    "any.required": "Email is required",
-  }),
-  password: Joi.string().min(6).required().messages({
-    "string.min": "Password length must be at least  characters long",
-    "any.required": "Password is required",
-  }),
+export const registrationSchema = zod.object({
+  firstName: zod
+    .string({
+      required_error: "First name is required.",
+    })
+    .min(2, {
+      message: "First name should be a minimum of 2 characters",
+    }),
+  lastName: zod
+    .string({
+      required_error: "Last name is required.",
+    })
+    .min(2),
+  username: zod
+    .string({
+      required_error: "Username is required.",
+    })
+    .min(2),
+  email: zod
+    .string({
+      required_error: "Email is required.",
+    })
+    .email({
+      message: "Invalid email",
+    }),
+  password: zod
+    .string({
+      required_error: "Password is required.",
+    })
+    .min(6, {
+      message: "Password must contain at least 6 character(s)",
+    }),
 });
 
-export const loginSchema = Joi.object({
-  username: Joi.string().min(2).required().messages({
-    "string.min": "Username length must be at least 2 characters long",
-    "any.required": "Username is required",
-  }),
-  email: Joi.string().email().required().messages({
-    "string.email": "Invalid email",
-    "any.required": "Email is required",
-  }),
-  password: Joi.string().min(6).required().messages({
-    "string.min": "Password length must be at least  characters long",
-    "any.required": "Password is required",
-  }),
+export const loginSchema = zod.object({
+  emailOrUsername: zod.union([zod.string().email(), zod.string().min(2)]),
+  password: zod.string().min(6),
 });
 
-export const menuSchema = Joi.object({
-  food: Joi.string().min(2).required(),
-  type: Joi.string().valid("continental", "local").required(),
-  password: Joi.string().valid("breakfast", "lunch", "supper").required(),
+export const menuSchema = zod.object({
+  food: zod.string().min(2),
+  type: zod.enum(["continental", "local"]),
+  password: zod.enum(["breakfast", "lunch", "supper"]),
 });

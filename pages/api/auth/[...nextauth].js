@@ -31,5 +31,21 @@ export default NextAuth({
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
-  theme: "light",
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user._id;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.token = token;
+      }
+      return session;
+    },
+  },
+  theme: {
+    colorScheme: "light",
+  },
 });
