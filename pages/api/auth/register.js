@@ -27,9 +27,7 @@ export default async function handler(req, res) {
     }
 
     user = await User.create(value);
-    const token = generateToken(user);
-
-    res.status(201).json({ token });
+    res.status(201).json({ user });
   } else {
     res.status(405).json({ error: "Method Not Allowed. Only POST is allowed" });
   }
