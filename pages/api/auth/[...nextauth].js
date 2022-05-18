@@ -1,6 +1,6 @@
+import bcrypt from "bcryptjs";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-
 import { dbConnect } from "../../../libs/dbConnect";
 import User from "../../../models/user.model";
 
@@ -22,11 +22,13 @@ export default NextAuth({
       async authorize(credentials) {
         await dbConnect();
         const { emailOrUsername, password } = credentials;
-
-        let user = await User.findWithCredentials(emailOrUsername, password);
+        let user = await User.findOne({
+          $or: [{ username: emailOrUsername }, { email: emailOrUsername }],
+        }).select("+password");
         console.log(user);
-        if (user) return user;
-        return null;
+        if (!user || !(await bcrypt.compare(password, user.password)))
+          return null;
+        return user;
       },
     }),
   ],

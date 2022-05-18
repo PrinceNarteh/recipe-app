@@ -26,6 +26,7 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true,
+      select: false,
     },
     menus: [
       {
@@ -52,13 +53,12 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.statics.findWithCredentials = async function (
-  emailOrUsername,
-  password
-) {
+userSchema.statics.findWithCredentials = async function (userData) {
+  console.log(user);
   let user = await this.findOne({
-    $or: [{ username: emailOrUsername }, { email: emailOrUsername }],
+    $or: [{ username: email }, { email: email }],
   });
+  console.log(user);
   if (!user || !(await bcrypt.compare(password, user.password))) return null;
   return user;
 };
