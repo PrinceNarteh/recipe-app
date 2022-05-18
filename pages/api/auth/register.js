@@ -31,6 +31,6 @@ export default async function handler(req, res) {
 
     res.status(201).json({ token });
   } else {
-    res.status().json({ error: "Method Not Allowed. Only POST is allowed" });
+    res.status(405).json({ error: "Method Not Allowed. Only POST is allowed" });
   }
 }
