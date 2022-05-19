@@ -16,14 +16,22 @@ const menuSchema = new Schema(
       required: true,
       enum: ["continental", "local"],
     },
-    time: {
+    timeToBeTaken: {
       type: String,
       required: true,
       enum: ["breakfast", "lunch", "supper"],
     },
-    recipe: {
-      type: Schema.Types.ObjectId,
-      ref: "Recipe",
+    ingredients: {
+      type: [String],
+      required: true,
+    },
+    timeTakenToCook: {
+      type: String,
+      required: true,
+    },
+    steps: {
+      type: [String],
+      required: true,
     },
   },
   {

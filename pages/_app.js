@@ -6,8 +6,10 @@ export default function App({
   pageProps: { session, ...pageProps },
 }) {
   return (
-    <SessionProvider session={session}>
-      <Component {...pageProps} />
-    </SessionProvider>
+    <div className="bg-slate-200 min-h-screen">
+      <SessionProvider session={session}>
+        <Component {...pageProps} />
+      </SessionProvider>
+    </div>
   );
 }
