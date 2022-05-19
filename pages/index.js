@@ -7,7 +7,7 @@ import Card from "../components/Card";
 
 export default function Home() {
   return (
-    <div className="max-w-6xl mx-auto pt-20 flex justify-center flex-wrap gap-10">
+    <div className="max-w-6xl mx-auto flex justify-center flex-wrap gap-10">
       <Card />
       <Card />
       <Card />
