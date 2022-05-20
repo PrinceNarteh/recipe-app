@@ -2,12 +2,12 @@ import { Schema, models, model } from "mongoose";
 
 const menuSchema = new Schema(
   {
-    creator: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    food: {
+    // creator: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "User",
+    //   required: true,
+    // },
+    name: {
       type: String,
       required: true,
     },
@@ -31,6 +31,10 @@ const menuSchema = new Schema(
     },
     steps: {
       type: [String],
+      required: true,
+    },
+    imageUrl: {
+      type: String,
       required: true,
     },
   },

@@ -21,9 +21,9 @@ export default NextAuth({
       },
       async authorize(credentials) {
         await dbConnect();
-        const { emailOrUsername, password } = credentials;
+        const { username, password } = credentials;
         let user = await User.findOne({
-          $or: [{ username: emailOrUsername }, { email: emailOrUsername }],
+          $or: [{ username }, { email: username }],
         }).select("+password");
         console.log(user);
         if (!user || !(await bcrypt.compare(password, user.password)))
@@ -37,6 +37,7 @@ export default NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user._id;
+        token.username = user.username;
       }
       return token;
     },
@@ -47,7 +48,7 @@ export default NextAuth({
       return session;
     },
   },
-  theme: {
-    colorScheme: "light",
+  pages: {
+    signIn: "/login",
   },
 });

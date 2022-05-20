@@ -48,5 +48,8 @@ export const loginSchema = zod.object({
 export const menuSchema = zod.object({
   food: zod.string().min(2),
   type: zod.enum(["continental", "local"]),
-  time: zod.enum(["breakfast", "lunch", "supper"]),
+  timeToBeTaken: zod.enum(["breakfast", "lunch", "supper"]),
+  timeTakenToCook: zod.number().min(1),
+  ingredients: zod.array(),
+  steps: zod.array(),
 });

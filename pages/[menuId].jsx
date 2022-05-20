@@ -1,18 +1,18 @@
-import Image from "next/image";
-import React from "react";
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/solid";
+import axios from "axios";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 
-const MenuDetails = () => {
+const MenuDetails = ({ menu }) => {
   return (
     <div className="max-w-4xl mx-auto shadow-lg">
       <div className="relative h-96">
-        <Image src="/waakye.jpg" layout="fill" />
+        <Image src={menu.imageUrl} layout="fill" />
       </div>
       <div className="p-4 mb-5">
         <div className="flex justify-between">
-          <h2 className="text-3xl font-semibold italic">
-            Waakye With Spaghetti
-          </h2>
+          <h2 className="text-3xl font-semibold italic">{menu.name}</h2>
           <div className="flex items-center space-x-2">
             <HeartIconSolid className="w-10 right-0 text-red-500 cursor-pointer" />
             <span className="text-2xl">250</span>
@@ -27,17 +27,17 @@ const MenuDetails = () => {
           <div className="mb-10">
             <h4 className="text-2xl font-bold italic underline">Ingredients</h4>
             <ul className="ml-10 text-2xl list-disc">
-              <li>Rice</li>
-              <li>Spaghetti</li>
-              <li>Beans</li>
+              {menu.ingredients.map((ingredient, idx) => (
+                <li key={idx}>{ingredient}</li>
+              ))}
             </ul>
           </div>
           <div>
             <h4 className="text-2xl font-bold italic underline">Step</h4>
             <ul className="ml-10 text-2xl list-disc">
-              <li>Put your beans on fire and wait for it to be well cooked</li>
-              <li>Add your waakye leaves to the beans</li>
-              <li>Wash your rice and add it to the beans</li>
+              {menu.steps.map((ingredient, idx) => (
+                <li key={idx}>{ingredient}</li>
+              ))}
             </ul>
           </div>
         </div>
@@ -47,3 +47,16 @@ const MenuDetails = () => {
 };
 
 export default MenuDetails;
+
+export async function getServerSideProps(context) {
+  const { menuId } = context.query;
+  const res = await axios(`http://localhost:3000/api/menus/${menuId}`);
+
+  console.log(res);
+
+  return {
+    props: {
+      menu: res.data.menu,
+    },
+  };
+}

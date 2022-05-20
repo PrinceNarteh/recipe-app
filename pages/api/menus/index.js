@@ -10,12 +10,7 @@ export default async function handler(req, res) {
     const menus = await Menu.find({});
     res.status(200).json({ menus });
   } else if (method === "POST") {
-    const { value, error } = menuSchema.validate(body, { abortEarly: false });
-    if (!error) {
-      let errors = error.details.map((err) => err.message);
-      return res.status(400).json({ errors });
-    }
-    const menu = await Menu.create(value);
+    const menu = await Menu.create(body);
     res.status(201).json({ menu });
   } else {
     res
